@@ -1,0 +1,112 @@
+import java.io.*;
+import java.util.Scanner;
+
+/**
+ * FileHandlingUtility
+ * ---------------------
+ * A simple Java program to demonstrate:
+ * 1. Writing to a file
+ * 2. Reading from a file
+ * 3. Modifying file content (replacing text)
+ *
+ * Author: Your Name
+ * Internship Task - CODTECH
+ */
+
+public class FileHandlingUtility {
+
+    // Method to write data to a file
+    public static void writeFile(String fileName, String content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            writer.write(content);
+            System.out.println("File written successfully.");
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    // Method to read data from a file
+    public static void readFile(String fileName) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            System.out.println("\nFile Content:");
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        }
+    }
+
+    // Method to modify file content (replace word)
+    public static void modifyFile(String fileName, String oldWord, String newWord) {
+        File file = new File(fileName);
+        StringBuilder content = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                content.append(line.replaceAll(oldWord, newWord)).append("\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error modifying file: " + e.getMessage());
+            return;
+        }
+
+        // Write updated content back to file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(content.toString());
+            System.out.println("File modified successfully.");
+        } catch (IOException e) {
+            System.out.println("Error writing modified content: " + e.getMessage());
+        }
+    }
+
+    // Main method - Menu Driven Program
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        String fileName = "sample.txt";
+
+        while (true) {
+            System.out.println("\n===== File Handling Utility =====");
+            System.out.println("1. Write to File");
+            System.out.println("2. Read File");
+            System.out.println("3. Modify File (Replace Word)");
+            System.out.println("4. Exit");
+            System.out.print("Choose an option: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter text to write: ");
+                    String content = scanner.nextLine();
+                    writeFile(fileName, content);
+                    break;
+
+                case 2:
+                    readFile(fileName);
+                    break;
+
+                case 3:
+                    System.out.print("Enter word to replace: ");
+                    String oldWord = scanner.nextLine();
+                    System.out.print("Enter new word: ");
+                    String newWord = scanner.nextLine();
+                    modifyFile(fileName, oldWord, newWord);
+                    break;
+
+                case 4:
+                    System.out.println("Exiting program...");
+                    scanner.close();
+                    System.exit(0);
+
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        }
+    }
+}
